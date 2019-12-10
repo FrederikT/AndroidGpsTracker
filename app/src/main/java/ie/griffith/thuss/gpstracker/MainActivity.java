@@ -26,23 +26,35 @@ import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 public class MainActivity extends AppCompatActivity {
 
     String logTag = "GPS_LOG_3013386";
-    TrackingTread tt;
-
+    TrackingTread tt = null;
+    TrackingTask t;
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         checkPermission();
 
-        Button btn = (Button) findViewById(R.id.btn);
+        Button start = (Button) findViewById(R.id.start);
+        Button stop = (Button) findViewById(R.id.stop);
 
-
-        btn.setOnClickListener(new View.OnClickListener() {
+        start.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-            tt = new TrackingTread(MainActivity.this);
+            /*tt = new TrackingTread(MainActivity.this);
             tt.run();
+            //new Thread(tt).start();
+            Log.e("Hurensohn", "I am eugene");*/
+            t = new TrackingTask();
+            t.execute(MainActivity.this);
+
+            }
+        });
+        stop.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+            if(t != null)
+                t.setKeepTracking(false);
 
             }
         });
@@ -68,7 +80,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        tt.stop();
+        if(tt != null)
+            tt.cancel();
     }
 }
 

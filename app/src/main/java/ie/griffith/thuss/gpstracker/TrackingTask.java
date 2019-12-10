@@ -1,20 +1,25 @@
 package ie.griffith.thuss.gpstracker;
 
 import android.content.Context;
+import android.os.AsyncTask;
 import android.os.SystemClock;
 import android.util.Log;
 
-public class TrackingTread extends Thread {
+public class TrackingTask extends AsyncTask<Context, Void, Void> {
     private Context context;
-    private LocationTrack locationTrack = null;
+    LocationTrack locationTrack = null;
     private int gpsReadDelay = 100;
+    private boolean keepTracking = true;
 
-    TrackingTread(Context context) {
-            this.context = context;
+    public void setKeepTracking(boolean keepTracking) {
+        this.keepTracking = keepTracking;
     }
 
-    public void run() {
-        while(true) {
+    protected Void doInBackground(Context... contexts) {
+
+        context = contexts[0];
+
+        while(keepTracking) {
             locationTrack = new LocationTrack(context);
             if (locationTrack.canGetLocation()) {
 
@@ -28,11 +33,16 @@ public class TrackingTread extends Thread {
             }
             SystemClock.sleep(gpsReadDelay);
         }
+
+        return null;
     }
 
-    public void cancel() {
-        interrupt();
+
+    protected void onPostExecute(Long result) {
         if(locationTrack != null)
             locationTrack.stopListener();
     }
+
+
 }
+

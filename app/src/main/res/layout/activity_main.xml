@@ -8,7 +8,14 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/btn"
-        android:layout_centerInParent="true"
-        android:text="GET LOCATION" />
+        android:id="@+id/start"
+        android:text="Start tracking"
+        android:layout_centerInParent="true"/>
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/stop"
+        android:text="Stop tracking"
+        android:layout_below="@id/start"
+        android:layout_centerHorizontal="true"/>
 </RelativeLayout>
