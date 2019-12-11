@@ -26,7 +26,6 @@ import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 public class MainActivity extends AppCompatActivity {
 
     String logTag = "GPS_LOG_3013386";
-    TrackingTread tt = null;
     TrackingTask t;
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -41,10 +40,6 @@ public class MainActivity extends AppCompatActivity {
         start.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-            /*tt = new TrackingTread(MainActivity.this);
-            tt.run();
-            //new Thread(tt).start();
-            Log.e("Hurensohn", "I am eugene");*/
             t = new TrackingTask();
             t.execute(MainActivity.this);
 
@@ -66,8 +61,7 @@ public class MainActivity extends AppCompatActivity {
     private void checkPermission() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED) {
-            /*Object mMap;
-            mMap.setMyLocationEnabled(true);*/
+
             Log.e(logTag,"GPS Permission granted");
         } else {
             // Show rationale and request permission.
@@ -80,8 +74,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if(tt != null)
-            tt.cancel();
+        t.setKeepTracking(false);
     }
 }
 

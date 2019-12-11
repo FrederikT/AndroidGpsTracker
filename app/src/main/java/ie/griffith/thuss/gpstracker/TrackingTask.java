@@ -1,9 +1,17 @@
 package ie.griffith.thuss.gpstracker;
 
+import android.Manifest;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.os.AsyncTask;
+import android.os.Looper;
 import android.os.SystemClock;
 import android.util.Log;
+
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+
+import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 
 public class TrackingTask extends AsyncTask<Context, Void, Void> {
     private Context context;
@@ -16,10 +24,11 @@ public class TrackingTask extends AsyncTask<Context, Void, Void> {
     }
 
     protected Void doInBackground(Context... contexts) {
-
+        Looper.prepare();
         context = contexts[0];
 
         while(keepTracking) {
+
             locationTrack = new LocationTrack(context);
             if (locationTrack.canGetLocation()) {
 
