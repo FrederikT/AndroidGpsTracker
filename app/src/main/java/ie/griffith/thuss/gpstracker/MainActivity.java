@@ -40,18 +40,21 @@ public class MainActivity extends AppCompatActivity {
         start.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-            t = new TrackingTask();
-            t.execute(MainActivity.this);
+                Log.e("MainActivity", "Tracking started");
+                t = new TrackingTask();
+                t.execute(MainActivity.this);
 
             }
         });
         stop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-            if(t != null)
-                t.setKeepTracking(false);
+                Log.e("MainActivity", "Tracking stopped");
+                if(t != null)
+                    t.setKeepTracking(false);
+                    t.printData();
 
-            }
+                }
         });
 
     }

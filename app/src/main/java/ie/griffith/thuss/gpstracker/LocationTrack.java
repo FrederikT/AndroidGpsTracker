@@ -33,7 +33,7 @@ public class LocationTrack extends Service implements LocationListener {
     Location loc;
     double latitude;
     double longitude;
-
+    double altitude;
 
     private static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 10;
 
@@ -81,6 +81,7 @@ public class LocationTrack extends Service implements LocationListener {
                         if (loc != null) {
                             latitude = loc.getLatitude();
                             longitude = loc.getLongitude();
+                            altitude = loc.getAltitude();
                         }
                     }
 
@@ -109,6 +110,13 @@ public class LocationTrack extends Service implements LocationListener {
             latitude = loc.getLatitude();
         }
         return latitude;
+    }
+
+    public double getAltitude() {
+        if (loc != null) {
+            altitude = loc.getAltitude();
+        }
+        return altitude;
     }
 
     public boolean canGetLocation() {
