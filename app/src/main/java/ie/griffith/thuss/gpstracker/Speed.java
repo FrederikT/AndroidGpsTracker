@@ -18,6 +18,8 @@ public class Speed {
         max = Double.MIN_VALUE;
     }
     public void addValue(Double newSpeed){
+
+        Log.e("speed", "added speed"+newSpeed);
         current = newSpeed;
         sum += newSpeed;
         count++;

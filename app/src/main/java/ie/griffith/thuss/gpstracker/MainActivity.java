@@ -52,7 +52,6 @@ public class MainActivity extends AppCompatActivity {
                 Log.e("MainActivity", "Tracking stopped");
                 if(t != null)
                     t.setKeepTracking(false);
-                    t.printData();
 
                 }
         });

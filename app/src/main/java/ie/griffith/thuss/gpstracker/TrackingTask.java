@@ -3,17 +3,16 @@ package ie.griffith.thuss.gpstracker;
 
 import android.content.Context;
 import android.location.Location;
-import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Looper;
 import android.os.SystemClock;
 import android.util.Log;
-import android.widget.Spinner;
 
 
 public class TrackingTask extends AsyncTask<Context, Void, Void> {
     private Context context;
     LocationTrack locationTrack = null;
+    //TODO set delay in in-app settings. min value 1 second. max value 300 seconds. -> slider?
     private int gpsReadDelay = 3000;
     private boolean keepTracking = true;
     private Altitude altitude = new Altitude();
@@ -27,8 +26,10 @@ public class TrackingTask extends AsyncTask<Context, Void, Void> {
     }
 
     protected Void doInBackground(Context... contexts) {
-        //TODO prepare Looper only once or make sure to have completely new task when starting second tracking
-        Looper.prepare();
+       if(Looper.myLooper() == null){
+           Looper.prepare();
+       }
+
         context = contexts[0];
          double longitude=0;
          double latitude=0;
@@ -55,12 +56,12 @@ public class TrackingTask extends AsyncTask<Context, Void, Void> {
                     distance += lastDistance;
 
                 }
-
-
-                                        // meter    /   seconds
+                                            // meter    /   seconds
                 speed.addValue(lastDistance/(gpsReadDelay/1000));
 
-                altitude.addValue(locationTrack.getAltitude());//TODO: Convert into meters
+                //coordinates SHOULD already contain the altitude in meters.
+                //therefore it is not necessary to convert anything
+                altitude.addValue(locationTrack.getAltitude());
 
                 longitude = newLongitude;
                 latitude = newLatitude;
@@ -74,13 +75,14 @@ public class TrackingTask extends AsyncTask<Context, Void, Void> {
         return null;
     }
 
-
-    protected void onPostExecute(Long result) {
+    @Override
+    protected void onPostExecute(Void aVoid) {
         if(locationTrack != null)
             locationTrack.stopListener();
 
         printData();
     }
+
 
     public void printData() {
         Log.e("printData","########GPS TRACKING RESULTS########");
