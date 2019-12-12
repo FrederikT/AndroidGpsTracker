@@ -5,13 +5,15 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 
-import java.util.ArrayList;
+
+import static ie.griffith.thuss.gpstracker.R.color.colorAdditionalDark;
 
 public class AltitudeGraph extends View {
     static Altitude altitude;
+    private Paint paint = new Paint();
+
 
     public AltitudeGraph(Context c) { super(c); }
     public AltitudeGraph(Context c, AttributeSet as) { super(c, as); }
@@ -31,6 +33,8 @@ public class AltitudeGraph extends View {
         /* Get graph size */
         int width = getMeasuredWidth();
         float height = getMeasuredHeight();
+
+
 
         /* Draw graph if at least 1 km has been done */
 
@@ -62,18 +66,17 @@ public class AltitudeGraph extends View {
                     altHeight =  Float.valueOf(String.valueOf((double)altitudeListItem));
                 }
 
-
-
-                paint.setColor(Color.BLUE);
+                paint.setColor(this.getResources().getColor(colorAdditionalDark));
                 canvas.drawLine(offset, height - (unit * altHeight), offset, height, paint);
 
                 offset += barWidth;
             }
+            paint.setTextSize(100);
+            paint.setColor(R.color.colorAdditionalBright);
+            canvas.drawText("Altitude", (float) (width*0.5), height, paint);
         }
     }
 
-    /* Graph appearance variables */
-    private Paint paint = new Paint();
 
 
 }

@@ -2,16 +2,19 @@
     <string name="app_name">GpsTracker</string>
     <string name="stats">Statistics summary</string>
 
-    <!-- Snackbar messages -->
+
     <string name="start">Tracking started!</string>
     <string name="granted">GPS access granted!</string>
     <string name="denied">GPS access denied…</string>
 
-    <!-- Statistics -->
-    <string name="current_speed">Current speed:&#160;</string>
-    <string name="total_distance">Total distance:&#160;</string>
-    <string name="average_speed">Average speed:&#160;</string>
-    <string name="elapsed_time">Elapsed time:&#160;</string>
-    <string name="time_per_km">Seconds per kilometer&#160;</string>
+
+    <string name="distance">Distance: </string>
+    <string name="average_speed">Average speed: </string>
+    <string name="minimal_speed">Minimum speed: </string>
+    <string name="maximal_speed">Maximum speed: </string>
+    <string name="time">Time: </string>
+    <string name="average_altitude">Average altitude: </string>
+    <string name="minimal_altitude">Minimum altitude: </string>
+    <string name="maximal_altitude">Maximum altitude: </string>
 
 </resources>

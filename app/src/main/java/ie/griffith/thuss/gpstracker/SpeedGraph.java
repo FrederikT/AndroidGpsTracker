@@ -9,9 +9,15 @@ import android.view.View;
 
 import java.util.ArrayList;
 
+import static ie.griffith.thuss.gpstracker.R.color.colorAccent;
+import static ie.griffith.thuss.gpstracker.R.color.colorAdditionalDark;
+import static ie.griffith.thuss.gpstracker.R.color.colorNegativeAccent;
+import static ie.griffith.thuss.gpstracker.R.color.colorPositiveAccent;
+import static ie.griffith.thuss.gpstracker.R.color.colorPrimaryDark;
+
 public class SpeedGraph extends View {
     static Speed speed;
-
+    private Paint paint = new Paint();
 
     public SpeedGraph(Context c) { super(c); }
     public SpeedGraph(Context c, AttributeSet as) { super(c, as); }
@@ -61,21 +67,23 @@ public class SpeedGraph extends View {
                 Double slowPace = speed.getAverage() - ((speed.getAverage() - speed.getMin())/2);
                 Double fastPace = speed.getAverage() + ((speed.getMax() - speed.getAverage())/2);
                 if(speedListItem >= fastPace){
-                    paint.setColor(Color.GREEN);
+                    paint.setColor(this.getResources().getColor(colorPositiveAccent));
                 }else if(speedListItem <= slowPace){
-                    paint.setColor(Color.RED);
+                    paint.setColor(this.getResources().getColor(colorNegativeAccent));
                 }else{
-                    paint.setColor(Color.BLUE);
+                    paint.setColor(this.getResources().getColor(colorAdditionalDark));
                 }
                 canvas.drawLine(offset, height - (unit * speedHeight), offset, height, paint);
 
                 offset += barWidth;
             }
+            paint.setTextSize(100);
+            paint.setColor(R.color.colorAdditionalBright);
+            canvas.drawText("Speed", (float) (width*0.5), height, paint);
         }
     }
 
-    /* Graph appearance variables */
-    private Paint paint = new Paint();
+
 
 
 }

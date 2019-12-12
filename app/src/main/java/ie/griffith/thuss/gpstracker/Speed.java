@@ -1,7 +1,5 @@
 package ie.griffith.thuss.gpstracker;
 
-import android.util.Log;
-import android.widget.ListView;
 
 import java.util.ArrayList;
 

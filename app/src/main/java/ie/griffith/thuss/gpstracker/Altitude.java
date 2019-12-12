@@ -1,7 +1,5 @@
 package ie.griffith.thuss.gpstracker;
 
-import android.os.Looper;
-import android.util.Log;
 
 import java.util.ArrayList;
 
