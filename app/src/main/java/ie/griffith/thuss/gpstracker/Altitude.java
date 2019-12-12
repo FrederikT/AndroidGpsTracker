@@ -1,6 +1,9 @@
 package ie.griffith.thuss.gpstracker;
 
+import android.os.Looper;
 import android.util.Log;
+
+import java.util.ArrayList;
 
 public class Altitude {
     private Double sum;
@@ -9,6 +12,7 @@ public class Altitude {
     private Double min;
     private Double max;
     private Double currentValue;
+    private ArrayList<Double> altitudeList = new ArrayList<>();
 
     public Altitude(){
         sum = 0.0;
@@ -18,6 +22,8 @@ public class Altitude {
     }
 
     public void addValue(Double newAltitude){
+        //Log.e("Altitude:", "Added new Altitude"+newAltitude);
+        altitudeList.add(newAltitude);
         currentValue = newAltitude;
         sum += newAltitude;
         count++;
@@ -42,5 +48,9 @@ public class Altitude {
 
     public Double getCurrentValue() {
         return currentValue;
+    }
+
+    public ArrayList<Double> getAltitudeList() {
+        return altitudeList;
     }
 }

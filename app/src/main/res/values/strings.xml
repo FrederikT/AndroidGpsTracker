@@ -1,3 +1,17 @@
 <resources>
     <string name="app_name">GpsTracker</string>
+    <string name="stats">Statistics summary</string>
+
+    <!-- Snackbar messages -->
+    <string name="start">Tracking started!</string>
+    <string name="granted">GPS access granted!</string>
+    <string name="denied">GPS access denied…</string>
+
+    <!-- Statistics -->
+    <string name="current_speed">Current speed:&#160;</string>
+    <string name="total_distance">Total distance:&#160;</string>
+    <string name="average_speed">Average speed:&#160;</string>
+    <string name="elapsed_time">Elapsed time:&#160;</string>
+    <string name="time_per_km">Seconds per kilometer&#160;</string>
+
 </resources>

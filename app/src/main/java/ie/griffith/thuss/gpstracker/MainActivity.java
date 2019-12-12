@@ -1,26 +1,17 @@
 package ie.griffith.thuss.gpstracker;
 
 import android.Manifest;
-import android.annotation.TargetApi;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.location.Location;
-import android.location.LocationManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
-import java.util.ArrayList;
-
-import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 
 public class MainActivity extends AppCompatActivity {
@@ -42,16 +33,26 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Log.e("MainActivity", "Tracking started");
                 t = new TrackingTask();
+                t.setKeepTracking(true);
                 t.execute(MainActivity.this);
 
             }
         });
+
         stop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Log.e("MainActivity", "Tracking stopped");
-                if(t != null)
+
+                if(t != null){
+                    SpeedGraph.speed = t.getSpeed();
+                    AltitudeGraph.altitude = t.getAltitude();
                     t.setKeepTracking(false);
+                    Intent intent = new Intent(getApplicationContext(), DetailActivity.class);
+                    startActivity(intent);
+                }
+
+
 
                 }
         });

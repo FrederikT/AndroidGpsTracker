@@ -8,6 +8,8 @@ import android.os.Looper;
 import android.os.SystemClock;
 import android.util.Log;
 
+import java.util.ArrayList;
+
 
 public class TrackingTask extends AsyncTask<Context, Void, Void> {
     private Context context;
@@ -21,6 +23,7 @@ public class TrackingTask extends AsyncTask<Context, Void, Void> {
 
 
 
+
     public void setKeepTracking(boolean keepTracking) {
         this.keepTracking = keepTracking;
     }
@@ -31,8 +34,8 @@ public class TrackingTask extends AsyncTask<Context, Void, Void> {
        }
 
         context = contexts[0];
-         double longitude=0;
-         double latitude=0;
+        double longitude=0;
+        double latitude=0;
         double lastDistance=0;
         while(keepTracking) {
 
@@ -84,7 +87,7 @@ public class TrackingTask extends AsyncTask<Context, Void, Void> {
     }
 
 
-    public void printData() {
+    private void printData() {
         Log.e("printData","########GPS TRACKING RESULTS########");
         Log.e("printData","__________________\n");
         Log.e("printData","Overall distance: "+distance);
@@ -98,6 +101,16 @@ public class TrackingTask extends AsyncTask<Context, Void, Void> {
         Log.e("printData","Min Altitude: "+altitude.getMin());
         Log.e("printData","\n\nThank you for using GPS TRACKING");
 
+    }
+
+
+    public Speed getSpeed(){
+        return speed;
+    }
+
+
+    public Altitude getAltitude(){
+        return altitude;
     }
 
 

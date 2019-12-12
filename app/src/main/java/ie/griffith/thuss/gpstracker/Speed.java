@@ -1,6 +1,9 @@
 package ie.griffith.thuss.gpstracker;
 
 import android.util.Log;
+import android.widget.ListView;
+
+import java.util.ArrayList;
 
 public class Speed {
     //all in m/s
@@ -10,16 +13,18 @@ public class Speed {
     private Double sum;
     private Double average;
     private int count;
+    private ArrayList<Double> speedList;
 
     public Speed(){
         sum = 0.0;
         count = 0;
         min = Double.MAX_VALUE;
         max = Double.MIN_VALUE;
+        speedList = new ArrayList<>();
     }
     public void addValue(Double newSpeed){
-
-        Log.e("speed", "added speed"+newSpeed);
+        speedList.add(newSpeed);
+        //Log.e("speed", "added speed"+newSpeed);
         current = newSpeed;
         sum += newSpeed;
         count++;
@@ -44,6 +49,10 @@ public class Speed {
 
     public Double getCurrentValue() {
         return current;
+    }
+
+    public ArrayList<Double> getSpeedList() {
+        return speedList;
     }
 }
 
