@@ -8,8 +8,6 @@ import android.os.Looper;
 import android.os.SystemClock;
 import android.util.Log;
 
-import java.util.ArrayList;
-
 
 public class TrackingTask extends AsyncTask<Context, Void, Void> {
     private Context context;
@@ -17,14 +15,14 @@ public class TrackingTask extends AsyncTask<Context, Void, Void> {
     //TODO set delay in in-app settings. min value 1 second. max value 300 seconds. -> slider?
     private int gpsReadDelay = 3000;
     private boolean keepTracking = true;
-    private Altitude altitude = new Altitude();
-    private Speed speed = new Speed();
+    private TrackingAttribute altitude = new TrackingAttribute();
+    private TrackingAttribute speed = new TrackingAttribute();
     private double distance=0; // in meters
 
 
 
 
-    public void setKeepTracking(boolean keepTracking) {
+    void setKeepTracking(boolean keepTracking) {
         this.keepTracking = keepTracking;
     }
 
@@ -82,19 +80,20 @@ public class TrackingTask extends AsyncTask<Context, Void, Void> {
     protected void onPostExecute(Void aVoid) {
         if(locationTrack != null)
             locationTrack.stopListener();
-
-        printData();
     }
 
 
+    /***
+     * debug method to print all data to Logcat
+     */
     private void printData() {
         Log.e("printData","########GPS TRACKING RESULTS########");
         Log.e("printData","__________________\n");
         Log.e("printData","Overall distance: "+distance);
         Log.e("printData","__________________\n");
-        Log.e("printData","Average Speed: "+speed.getAverage());
-        Log.e("printData","Max Speed: "+speed.getMax());
-        Log.e("printData","Min Speed: "+speed.getMin());
+        Log.e("printData","Average TrackingAttribute: "+ speed.getAverage());
+        Log.e("printData","Max TrackingAttribute: "+ speed.getMax());
+        Log.e("printData","Min TrackingAttribute: "+ speed.getMin());
         Log.e("printData","__________________\n");
         Log.e("printData","Average Altitude: "+altitude.getAverage());
         Log.e("printData","Max Altitude: " +altitude.getMax());
@@ -104,15 +103,18 @@ public class TrackingTask extends AsyncTask<Context, Void, Void> {
     }
 
 
-    public Speed getSpeed(){
+    TrackingAttribute getSpeed(){
         return speed;
     }
 
 
-    public Altitude getAltitude(){
+    TrackingAttribute getAltitude(){
         return altitude;
     }
 
 
+    Double getDistance() {
+        return distance;
+    }
 }
 

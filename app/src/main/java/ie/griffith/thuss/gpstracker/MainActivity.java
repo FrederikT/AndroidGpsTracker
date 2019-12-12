@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -12,12 +13,16 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
+
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 
 public class MainActivity extends AppCompatActivity {
-
-    String logTag = "GPS_LOG_3013386";
     TrackingTask t;
+    Date startTime;
+    Date endTime;
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -25,12 +30,13 @@ public class MainActivity extends AppCompatActivity {
 
         checkPermission();
 
-        Button start = (Button) findViewById(R.id.start);
-        Button stop = (Button) findViewById(R.id.stop);
+        Button start = findViewById(R.id.start);
+        Button stop =  findViewById(R.id.stop);
 
         start.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                startTime = new Date();
                 Log.e("MainActivity", "Tracking started");
                 t = new TrackingTask();
                 t.setKeepTracking(true);
@@ -42,12 +48,17 @@ public class MainActivity extends AppCompatActivity {
         stop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                endTime = new Date();
                 Log.e("MainActivity", "Tracking stopped");
 
                 if(t != null){
-                    SpeedGraph.speed = t.getSpeed();
-                    AltitudeGraph.altitude = t.getAltitude();
                     t.setKeepTracking(false);
+                    DetailActivity.altitude = t.getAltitude();
+                    DetailActivity.speed = t.getSpeed();
+                    DetailActivity.distance = t.getDistance();
+                    DetailActivity.timeInMs = endTime.getTime() - startTime.getTime();
+
+
                     Intent intent = new Intent(getApplicationContext(), DetailActivity.class);
                     startActivity(intent);
                 }
@@ -65,10 +76,10 @@ public class MainActivity extends AppCompatActivity {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED) {
 
-            Log.e(logTag,"GPS Permission granted");
+            Log.e("MainActivity","GPS Permission granted");
         } else {
             // Show rationale and request permission.
-            Log.e(logTag,"GPS Permission declined \n request permission");
+            Log.e("MainActivity","GPS Permission declined \n request permission");
             ActivityCompat.requestPermissions(this,
                     new String[]{ACCESS_FINE_LOCATION}, 0);
         }
