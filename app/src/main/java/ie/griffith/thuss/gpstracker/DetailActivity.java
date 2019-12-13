@@ -9,10 +9,7 @@ import java.sql.Time;
 import java.util.Date;
 
 public class DetailActivity extends AppCompatActivity {
-    static TrackingAttribute speed;
-    static TrackingAttribute altitude;
-    static Double distance=0.0;
-    static long timeInMs=0;
+    static TrackerEntry entry;
 
     private TextView distanceValue, timeValue, avgSpeedValue, maxSpeedValue, minSpeedValue, avgAltitudeValue, maxAltitudeValue, minAltitudeValue;
 
@@ -31,12 +28,12 @@ public class DetailActivity extends AppCompatActivity {
 
         speedGraph.getLayoutParams().height = (int) (height*0.4);
         speedGraph.markExtremes = true;
-        speedGraph.trackingAttribute = speed;
+        speedGraph.trackingAttribute = entry.getSpeed();
         speedGraph.graphDescription = "Speed";
 
 
         altitudeGraph.getLayoutParams().height = (int) (height*0.25);
-        altitudeGraph.trackingAttribute = altitude;
+        altitudeGraph.trackingAttribute = entry.getAltitude();
         altitudeGraph.graphDescription = "Altitude";
 
         setValues();
@@ -53,20 +50,20 @@ public class DetailActivity extends AppCompatActivity {
         maxAltitudeValue = findViewById(R.id.max_altitude_value);
         minAltitudeValue = findViewById(R.id.min_altitude_value);
 
-        distanceValue.setText(String.format("%.2f",distance)+"m/s");
+        distanceValue.setText(String.format("%.2f",entry.getDistance())+"m/s");
         timeValue.setText(getTimeString());
-        avgSpeedValue.setText(String.format("%.2f",speed.getAverage())+"m/s");
-        maxSpeedValue.setText(String.format("%.2f",speed.getMax())+"m/s");
-        minSpeedValue.setText(String.format("%.2f",speed.getMin())+"m/s");
-        avgAltitudeValue.setText(String.format("%.2f",altitude.getAverage())+"m");
-        maxAltitudeValue.setText(String.format("%.2f",altitude.getMax())+"m");
-        minAltitudeValue.setText(String.format("%.2f",altitude.getMin())+"m");
+        avgSpeedValue.setText(String.format("%.2f",entry.getSpeed().getAverage())+"m/s");
+        maxSpeedValue.setText(String.format("%.2f",entry.getSpeed().getMax())+"m/s");
+        minSpeedValue.setText(String.format("%.2f",entry.getSpeed().getMin())+"m/s");
+        avgAltitudeValue.setText(String.format("%.2f",entry.getAltitude().getAverage())+"m");
+        maxAltitudeValue.setText(String.format("%.2f",entry.getAltitude().getMax())+"m");
+        minAltitudeValue.setText(String.format("%.2f",entry.getAltitude().getMin())+"m");
 
 
     }
 
     private String getTimeString() {
-        long seconds = timeInMs / 1000;
+        long seconds = entry.getTime() / 1000;
         long minutes = seconds / 60;
         seconds = seconds % 60;
         long hours = minutes / 60;

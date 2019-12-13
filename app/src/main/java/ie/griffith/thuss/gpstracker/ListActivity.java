@@ -38,12 +38,7 @@ public class ListActivity extends AppCompatActivity {
 
                 Intent intent = new Intent(getApplicationContext(), DetailActivity.class);
                 TrackerEntry entry = list.get(position);
-                DetailActivity.speed = entry.getSpeed();
-                DetailActivity.altitude = entry.getAltitude();
-                DetailActivity.distance = entry.getDistance();
-                DetailActivity.timeInMs = entry.getTime();
-
-
+                DetailActivity.entry = entry;
                 startActivity(intent);
 
 
