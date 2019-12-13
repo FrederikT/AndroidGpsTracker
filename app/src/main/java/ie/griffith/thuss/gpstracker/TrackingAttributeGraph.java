@@ -6,10 +6,12 @@ import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.view.View;
 
+import static ie.griffith.thuss.gpstracker.R.color.colorAccent;
 import static ie.griffith.thuss.gpstracker.R.color.colorAdditionalBright;
 import static ie.griffith.thuss.gpstracker.R.color.colorAdditionalDark;
 import static ie.griffith.thuss.gpstracker.R.color.colorNegativeAccent;
 import static ie.griffith.thuss.gpstracker.R.color.colorPositiveAccent;
+import static ie.griffith.thuss.gpstracker.R.color.colorPrimaryDark;
 
 public class TrackingAttributeGraph extends View {
     public TrackingAttribute trackingAttribute;
@@ -70,7 +72,24 @@ public class TrackingAttributeGraph extends View {
                 canvas.drawLine(offset, height - (unit * trackingAttributeHeight), offset, height, paint);
                 offset += barWidth;
             }
+            float averageLineHeight;
+            // Just as safety because double - float cast necessary and normally not possible
+            if(trackingAttribute.getAverage() > Float.MAX_VALUE){
+                averageLineHeight =  Float.MAX_VALUE;
+            }else{
+                averageLineHeight =  Float.valueOf(String.valueOf(trackingAttribute.getAverage()));
+            }
+            averageLineHeight = height - unit*averageLineHeight;
+            paint.setColor(this.getResources().getColor(colorAccent));
+            paint.setStrokeWidth(2);
+            canvas.drawLine(0, averageLineHeight, offset, averageLineHeight, paint);
+
+
             addDescription(canvas);
+
+
+
+
         }
     }
 
@@ -79,7 +98,7 @@ public class TrackingAttributeGraph extends View {
         float height = getMeasuredHeight();
 
         paint.setTextSize(100);
-        paint.setColor(this.getResources().getColor(colorAdditionalBright));
+        paint.setColor(this.getResources().getColor(colorPrimaryDark));
         canvas.drawText(graphDescription, (float) (width*0.5), (float) (height*0.85), paint);
     }
 

@@ -8,6 +8,8 @@ import android.os.Looper;
 import android.os.SystemClock;
 import android.util.Log;
 
+import java.util.Date;
+
 
 public class TrackingTask extends AsyncTask<Context, Void, Void> {
     private Context context;
@@ -57,6 +59,7 @@ public class TrackingTask extends AsyncTask<Context, Void, Void> {
                     distance += lastDistance;
 
                 }
+
                                             // meter    /   seconds
                 speed.addValue(lastDistance/(gpsReadDelay/1000));
 
@@ -103,18 +106,8 @@ public class TrackingTask extends AsyncTask<Context, Void, Void> {
     }
 
 
-    TrackingAttribute getSpeed(){
-        return speed;
-    }
-
-
-    TrackingAttribute getAltitude(){
-        return altitude;
-    }
-
-
-    Double getDistance() {
-        return distance;
+    TrackerEntry getTrackerEntry(){
+        return new TrackerEntry(new Date(),  distance, 0, speed, altitude);
     }
 }
 

@@ -20,6 +20,7 @@ import java.util.Date;
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 
 public class MainActivity extends AppCompatActivity {
+    private TrackerEntryManager manager;
     TrackingTask t;
     Date startTime;
     Date endTime;
@@ -27,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        manager = new TrackerEntryManager(getApplicationContext());
 
         checkPermission();
 
@@ -53,13 +55,12 @@ public class MainActivity extends AppCompatActivity {
 
                 if(t != null){
                     t.setKeepTracking(false);
-                    DetailActivity.altitude = t.getAltitude();
-                    DetailActivity.speed = t.getSpeed();
-                    DetailActivity.distance = t.getDistance();
-                    DetailActivity.timeInMs = endTime.getTime() - startTime.getTime();
+                    TrackerEntry entry = t.getTrackerEntry();
 
-
-                    Intent intent = new Intent(getApplicationContext(), DetailActivity.class);
+                    entry.setTime((int) (endTime.getTime() - startTime.getTime()));
+                    manager.saveNewEntry(entry);
+                    ListActivity.list = manager.getEntries(getApplicationContext());
+                    Intent intent = new Intent(getApplicationContext(), ListActivity.class);
                     startActivity(intent);
                 }
 

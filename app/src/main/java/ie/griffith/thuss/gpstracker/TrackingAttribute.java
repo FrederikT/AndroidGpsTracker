@@ -52,6 +52,18 @@ public class TrackingAttribute {
     ArrayList<Double> getList() {
         return list;
     }
+
+    public void setMin(Double min) {
+        this.min = min;
+    }
+
+    public void setMax(Double max) {
+        this.max = max;
+    }
+
+    public void setAverage(Double average) {
+        this.average = average;
+    }
 }
 
 
