@@ -34,16 +34,18 @@ public class MainActivity extends AppCompatActivity {
 
         Button start = findViewById(R.id.start);
         Button stop =  findViewById(R.id.stop);
+        Button history = findViewById(R.id.history);
 
         start.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startTime = new Date();
-                Log.e("MainActivity", "Tracking started");
-                t = new TrackingTask();
-                t.setKeepTracking(true);
-                t.execute(MainActivity.this);
-
+                if(t == null) {
+                    startTime = new Date();
+                    Log.e("MainActivity", "Tracking started");
+                    t = new TrackingTask();
+                    t.setKeepTracking(true);
+                    t.execute(MainActivity.this);
+                }
             }
         });
 
@@ -56,17 +58,26 @@ public class MainActivity extends AppCompatActivity {
                 if(t != null){
                     t.setKeepTracking(false);
                     TrackerEntry entry = t.getTrackerEntry();
-
+                    t = null;
                     entry.setTime((int) (endTime.getTime() - startTime.getTime()));
                     manager.saveNewEntry(entry);
-                    ListActivity.list = manager.getEntries(getApplicationContext());
-                    Intent intent = new Intent(getApplicationContext(), ListActivity.class);
+                    DetailActivity.entry = entry;
+                    Intent intent = new Intent(getApplicationContext(), DetailActivity.class);
                     startActivity(intent);
                 }
 
 
 
                 }
+        });
+
+        history.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ListActivity.list = manager.getEntries(getApplicationContext());
+                Intent intent = new Intent(getApplicationContext(), ListActivity.class);
+                startActivity(intent);
+            }
         });
 
     }

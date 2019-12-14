@@ -28,6 +28,10 @@ public class TrackingDB extends SQLiteOpenHelper {
         try {
             String sql = "CREATE TABLE trackerentry (date INTEGER Primary KEY, distance DOUBLE, time INTEGER, avgSpeed DOUBLE, maxSpeed DOUBLE, minSpeed DOUBLE, avgAltitude DOUBLE, maxAltitude DOUBLE, minAltitude DOUBLE)";
             db.execSQL(sql);
+            sql = "CREATE TABLE speed (date INTEGER, speed DOUBLE)";
+            db.execSQL(sql);
+            sql = "CREATE TABLE altitude (date INTEGER, altitude DOUBLE)";
+            db.execSQL(sql);
             Log.e("TrackingDB", "onCreate: table successfully created");
         }catch (Exception e){
             Log.e("TrackingDB", "onCreate: "+e.getMessage());
@@ -46,6 +50,14 @@ public class TrackingDB extends SQLiteOpenHelper {
         try {
             String sql = "Insert into trackerentry Values("+date.getTime()+", "+distance+", "+time+", " +speed.getAverage()+", "+speed.getMax()+", "+speed.getMin()+", "+altitude.getAverage()+", "+altitude.getMax()+", "+altitude.getMin()+")";
             db.execSQL(sql);
+            for (Double speedItem:speed.getList()) {
+                 sql = "Insert into speed Values("+date.getTime()+", "+speedItem+")";
+                db.execSQL(sql);
+            }
+            for (Double altitudeItem:altitude.getList()) {
+                sql = "Insert into altitude Values("+date.getTime()+", "+altitudeItem+")";
+                db.execSQL(sql);
+            }
             Log.e("TrackingDB", "successfully added entry to db ");
 
         }catch (Exception e){
@@ -60,7 +72,14 @@ public class TrackingDB extends SQLiteOpenHelper {
             String sql = "Insert into trackerentry Values("+entry.getDate().getTime()+", "+entry.getDistance()+", "+entry.getTime()+", " +entry.getSpeed().getAverage()+", "+entry.getSpeed().getMax()+", "+entry.getSpeed().getMin()+", "+entry.getAltitude().getAverage()+", "+entry.getAltitude().getMax()+", "+entry.getAltitude().getMin()+")";
             db.execSQL(sql);
             Log.e("TrackingDB", "successfully added entry to db ");
-
+            for (Double speedItem:entry.getSpeed().getList()) {
+                sql = "Insert into speed Values("+entry.getDate().getTime()+", "+speedItem+")";
+                db.execSQL(sql);
+            }
+            for (Double altitudeItem:entry.getAltitude().getList()) {
+                sql = "Insert into altitude Values("+entry.getDate().getTime()+", "+altitudeItem+")";
+                db.execSQL(sql);
+            }
         }catch (Exception e){
             Log.e("TrackingDB", "on Insert: "+e.getMessage());
             Toast toast = Toast.makeText(context, "ERROR: Entry could not be added to list", Toast.LENGTH_SHORT);
@@ -108,8 +127,9 @@ public class TrackingDB extends SQLiteOpenHelper {
 
     public List<TrackerEntry> getEntries(){
         List<TrackerEntry> entries = new ArrayList<>();
+        Cursor cursor = null;
         try{
-            Cursor cursor = db.rawQuery("Select * from trackerentry", null);
+            cursor = db.rawQuery("Select * from trackerentry", null);
             cursor.moveToNext();
             while(!cursor.isAfterLast()){
 
@@ -128,6 +148,26 @@ public class TrackingDB extends SQLiteOpenHelper {
                 cursor.moveToNext();
                 Log.e("TrackingDB", "on Select: getEntries() successfully added entry from db to list ");
             }
+        }catch (Exception e){
+            Log.e("TrackingDB", "on Select: getEntries() "+e.getMessage());
+        }
+        try{
+            for (TrackerEntry entry : entries) {
+                cursor = db.rawQuery("Select * from speed where date = "+entry.getDate().getTime(), null);
+                cursor.moveToNext();
+                while(!cursor.isAfterLast()){
+                    List speedList = entry.getSpeed().getList();
+                    speedList.add(Double.parseDouble(cursor.getString(1)));
+                    cursor.moveToNext();
+                }
+                cursor = db.rawQuery("Select * from altitude where date = "+entry.getDate().getTime(), null);
+                cursor.moveToNext();
+                while(!cursor.isAfterLast()){
+                    List altitudeList = entry.getAltitude().getList();
+                    altitudeList.add(Double.parseDouble(cursor.getString(1)));
+                    cursor.moveToNext();
+                }
+            }
             cursor.close();
             return entries;
 
@@ -135,7 +175,7 @@ public class TrackingDB extends SQLiteOpenHelper {
             Log.e("TrackingDB", "on Select: getEntries() "+e.getMessage());
         }
 
-        return null;
+        return new ArrayList<>();
     }
 
 
@@ -159,6 +199,20 @@ public class TrackingDB extends SQLiteOpenHelper {
                 entry = new TrackerEntry(dat,distance,time,speed,altitude);
                 cursor.moveToNext();
 
+            }
+            cursor = db.rawQuery("Select * from speed where date = "+entry.getDate().getTime(), null);
+            cursor.moveToNext();
+            while(!cursor.isAfterLast()){
+                List speedList = entry.getSpeed().getList();
+                speedList.add(Double.parseDouble(cursor.getString(1)));
+                cursor.moveToNext();
+            }
+            cursor = db.rawQuery("Select * from altitude where date = "+entry.getDate().getTime(), null);
+            cursor.moveToNext();
+            while(!cursor.isAfterLast()){
+                List altitudeList = entry.getAltitude().getList();
+                altitudeList.add(Double.parseDouble(cursor.getString(1)));
+                cursor.moveToNext();
             }
             cursor.close();
             return entry;
