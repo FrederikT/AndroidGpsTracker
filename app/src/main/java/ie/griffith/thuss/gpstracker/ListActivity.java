@@ -36,8 +36,7 @@ public class ListActivity extends AppCompatActivity {
                                     int position, long id) {
 
                 Intent intent = new Intent(getApplicationContext(), DetailActivity.class);
-                TrackerEntry entry = list.get(position);
-                DetailActivity.entry = entry;
+                DetailActivity.entry = list.get(position);
                 startActivity(intent);
 
 

@@ -148,7 +148,7 @@
         android:layout_below="@id/average_altitude"
         android:layout_marginTop="5dp"
         android:layout_marginStart="5dp"
-        android:layout_toRightOf="@id/max_altitude"
+        android:layout_toEndOf="@id/max_altitude"
         android:textColor="@color/colorPrimaryDark"/>
 
     <!-- Minimal altitude -->
@@ -168,7 +168,7 @@
         android:layout_below="@id/max_altitude"
         android:layout_marginTop="5dp"
         android:layout_marginStart="5dp"
-        android:layout_toRightOf="@id/min_altitude"
+        android:layout_toEndOf="@id/min_altitude"
         android:textColor="@color/colorPrimaryDark"/>
 
     <!-- Graph -->

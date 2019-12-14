@@ -10,7 +10,7 @@ public class TrackerEntry {
     private TrackingAttribute speed;
     private TrackingAttribute altitude;
 
-    public TrackerEntry(Date date, double distance, int time, TrackingAttribute speed, TrackingAttribute altitude) {
+    TrackerEntry(Date date, double distance, int time, TrackingAttribute speed, TrackingAttribute altitude) {
         this.date = date;
         this.distance = distance;
         this.time = time;
@@ -18,43 +18,43 @@ public class TrackerEntry {
         this.altitude = altitude;
     }
 
-    public Date getDate() {
+    Date getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    void setDate(Date date) {
         this.date = date;
     }
 
-    public double getDistance() {
+    double getDistance() {
         return distance;
     }
 
-    public void setDistance(double distance) {
+    void setDistance(double distance) {
         this.distance = distance;
     }
 
-    public int getTime() {
+    int getTime() {
         return time;
     }
 
-    public void setTime(int time) {
+    void setTime(int time) {
         this.time = time;
     }
 
-    public TrackingAttribute getSpeed() {
+    TrackingAttribute getSpeed() {
         return speed;
     }
 
-    public void setSpeed(TrackingAttribute speed) {
+    void setSpeed(TrackingAttribute speed) {
         this.speed = speed;
     }
 
-    public TrackingAttribute getAltitude() {
+    TrackingAttribute getAltitude() {
         return altitude;
     }
 
-    public void setAltitude(TrackingAttribute altitude) {
+    void setAltitude(TrackingAttribute altitude) {
         this.altitude = altitude;
     }
 

@@ -16,5 +16,8 @@
     <string name="average_altitude">Average altitude: </string>
     <string name="minimal_altitude">Minimum altitude: </string>
     <string name="maximal_altitude">Maximum altitude: </string>
+    <string name="start_tracking">Start tracking</string>
+    <string name="stop_tracking">Stop tracking</string>
+    <string name="history">History</string>
 
 </resources>
