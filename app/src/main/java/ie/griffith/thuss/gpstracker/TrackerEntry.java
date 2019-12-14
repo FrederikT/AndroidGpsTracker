@@ -1,5 +1,6 @@
 package ie.griffith.thuss.gpstracker;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class TrackerEntry {
@@ -59,6 +60,7 @@ public class TrackerEntry {
 
     @Override
     public String toString() {
-        return date.toString() +" | "+ distance + "m | " + speed.getAverage()+"m/s";
+        SimpleDateFormat format = new SimpleDateFormat("MMM dd, yyyy  hh:mm a");
+        return format.format(date) +"  "+ distance + " m ";// + speed.getAverage()+" m/s";
     }
 }

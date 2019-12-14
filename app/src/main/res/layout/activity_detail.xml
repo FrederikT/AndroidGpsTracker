@@ -4,7 +4,9 @@
     android:id="@+id/detailLayout"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/colorAdditionalBright"
+    >
 
 
 
@@ -15,14 +17,16 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:layout_marginStart="10dp"
-        android:text="@string/distance"/>
+        android:text="@string/distance"
+        android:textColor="@color/colorPrimaryDark"/>
     <TextView
         android:id="@+id/total_distance_value"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_toEndOf="@id/total_distance"
         android:layout_marginTop="10dp"
-        android:layout_marginStart="5dp"/>
+        android:layout_marginStart="5dp"
+        android:textColor="@color/colorPrimaryDark"/>
 
     <!-- Time elapsed -->
     <TextView
@@ -32,7 +36,8 @@
         android:layout_below="@id/total_distance"
         android:layout_marginTop="5dp"
         android:layout_marginStart="10dp"
-        android:text="@string/time"/>
+        android:text="@string/time"
+        android:textColor="@color/colorPrimaryDark"/>
 
     <TextView
         android:id="@+id/time_value"
@@ -41,7 +46,8 @@
         android:layout_below="@id/total_distance"
         android:layout_toEndOf="@id/time"
         android:layout_marginTop="5dp"
-        android:layout_marginStart="5dp"/>
+        android:layout_marginStart="5dp"
+        android:textColor="@color/colorPrimaryDark"/>
 
 
     <!-- Average speed -->
@@ -52,7 +58,8 @@
         android:layout_below="@id/time"
         android:layout_marginTop="5dp"
         android:layout_marginStart="10dp"
-        android:text="@string/average_speed"/>
+        android:text="@string/average_speed"
+        android:textColor="@color/colorPrimaryDark"/>
 
     <TextView
         android:id="@+id/average_speed_value"
@@ -61,7 +68,8 @@
         android:layout_below="@id/time"
         android:layout_marginTop="5dp"
         android:layout_marginStart="5dp"
-        android:layout_toEndOf="@id/average_speed"/>
+        android:layout_toEndOf="@id/average_speed"
+        android:textColor="@color/colorPrimaryDark"/>
 
     <!-- Maximal speed -->
     <TextView
@@ -71,7 +79,8 @@
         android:layout_below="@id/average_speed"
         android:layout_marginTop="5dp"
         android:layout_marginStart="10dp"
-        android:text="@string/maximal_speed"/>
+        android:text="@string/maximal_speed"
+        android:textColor="@color/colorPrimaryDark"/>
     <TextView
         android:id="@+id/max_speed_value"
         android:layout_width="wrap_content"
@@ -79,7 +88,8 @@
         android:layout_below="@id/average_speed"
         android:layout_marginTop="5dp"
         android:layout_marginStart="5dp"
-        android:layout_toEndOf="@id/max_speed"/>
+        android:layout_toEndOf="@id/max_speed"
+        android:textColor="@color/colorPrimaryDark"/>
 
     <!-- Minimal speed -->
     <TextView
@@ -89,7 +99,8 @@
         android:layout_below="@id/max_speed"
         android:layout_marginTop="5dp"
         android:layout_marginStart="10dp"
-        android:text="@string/minimal_speed"/>
+        android:text="@string/minimal_speed"
+        android:textColor="@color/colorPrimaryDark"/>
     <TextView
         android:id="@+id/min_speed_value"
         android:layout_width="wrap_content"
@@ -97,7 +108,8 @@
         android:layout_below="@id/max_speed"
         android:layout_marginTop="5dp"
         android:layout_marginStart="5dp"
-        android:layout_toEndOf="@id/min_speed"/>
+        android:layout_toEndOf="@id/min_speed"
+        android:textColor="@color/colorPrimaryDark"/>
 
     <!-- Average altitude -->
     <TextView
@@ -107,7 +119,8 @@
         android:layout_below="@id/min_speed"
         android:layout_marginTop="5dp"
         android:layout_marginStart="10dp"
-        android:text="@string/average_altitude"/>
+        android:text="@string/average_altitude"
+        android:textColor="@color/colorPrimaryDark"/>
     <TextView
         android:id="@+id/average_altitude_value"
         android:layout_width="wrap_content"
@@ -115,7 +128,8 @@
         android:layout_below="@id/min_speed"
         android:layout_marginTop="5dp"
         android:layout_marginStart="5dp"
-        android:layout_toEndOf="@id/average_altitude"/>
+        android:layout_toEndOf="@id/average_altitude"
+        android:textColor="@color/colorPrimaryDark"/>
 
     <!-- Maximal altitude -->
     <TextView
@@ -125,7 +139,8 @@
         android:layout_below="@id/average_altitude"
         android:layout_marginTop="5dp"
         android:layout_marginStart="10dp"
-        android:text="@string/maximal_altitude"/>
+        android:text="@string/maximal_altitude"
+        android:textColor="@color/colorPrimaryDark"/>
     <TextView
         android:id="@+id/max_altitude_value"
         android:layout_width="wrap_content"
@@ -133,7 +148,8 @@
         android:layout_below="@id/average_altitude"
         android:layout_marginTop="5dp"
         android:layout_marginStart="5dp"
-        android:layout_toRightOf="@id/max_altitude"/>
+        android:layout_toRightOf="@id/max_altitude"
+        android:textColor="@color/colorPrimaryDark"/>
 
     <!-- Minimal altitude -->
     <TextView
@@ -143,7 +159,8 @@
         android:layout_below="@id/max_altitude"
         android:layout_marginTop="5dp"
         android:layout_marginStart="10dp"
-        android:text="@string/minimal_altitude"/>
+        android:text="@string/minimal_altitude"
+        android:textColor="@color/colorPrimaryDark"/>
     <TextView
         android:id="@+id/min_altitude_value"
         android:layout_width="wrap_content"
@@ -151,7 +168,8 @@
         android:layout_below="@id/max_altitude"
         android:layout_marginTop="5dp"
         android:layout_marginStart="5dp"
-        android:layout_toRightOf="@id/min_altitude"/>
+        android:layout_toRightOf="@id/min_altitude"
+        android:textColor="@color/colorPrimaryDark"/>
 
     <!-- Graph -->
     <ie.griffith.thuss.gpstracker.TrackingAttributeGraph
