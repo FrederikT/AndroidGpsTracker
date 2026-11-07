@@ -127,100 +127,68 @@ public class TrackingDB extends SQLiteOpenHelper {
 
     public List<TrackerEntry> getEntries(){
         List<TrackerEntry> entries = new ArrayList<>();
-        Cursor cursor = null;
-        try{
-            cursor = db.rawQuery("Select * from trackerentry", null);
-            cursor.moveToNext();
-            while(!cursor.isAfterLast()){
-
-                Date date = new Date(Long.parseLong(cursor.getString(0)));
-                double distance = Double.parseDouble(cursor.getString(1));
-                int time = Integer.parseInt(cursor.getString(2));
-                TrackingAttribute speed = new TrackingAttribute();
-                speed.setAverage(Double.parseDouble(cursor.getString(3)));
-                speed.setMax(Double.parseDouble(cursor.getString(4)));
-                speed.setMin(Double.parseDouble(cursor.getString(5)));
-                TrackingAttribute altitude = new TrackingAttribute();
-                altitude.setAverage(Double.parseDouble(cursor.getString(6)));
-                altitude.setMax(Double.parseDouble(cursor.getString(7)));
-                altitude.setMin(Double.parseDouble(cursor.getString(8)));
-                entries.add(new TrackerEntry(date,distance,time,speed,altitude));
-                cursor.moveToNext();
-                Log.e("TrackingDB", "on Select: getEntries() successfully added entry from db to list ");
+        try (Cursor cursor = db.rawQuery("SELECT * FROM trackerentry", null)) {
+            while (cursor.moveToNext()) {
+                entries.add(readEntry(cursor));
             }
-        }catch (Exception e){
-            Log.e("TrackingDB", "on Select: getEntries() "+e.getMessage());
+        } catch (Exception e) {
+            Log.e("TrackingDB", "on Select: getEntries() " + e.getMessage());
         }
-        try{
+
+        try {
             for (TrackerEntry entry : entries) {
-                cursor = db.rawQuery("Select * from speed where date = "+entry.getDate().getTime(), null);
-                cursor.moveToNext();
-                while(!cursor.isAfterLast()){
-                    List speedList = entry.getSpeed().getList();
-                    speedList.add(Double.parseDouble(cursor.getString(1)));
-                    cursor.moveToNext();
-                }
-                cursor = db.rawQuery("Select * from altitude where date = "+entry.getDate().getTime(), null);
-                cursor.moveToNext();
-                while(!cursor.isAfterLast()){
-                    List altitudeList = entry.getAltitude().getList();
-                    altitudeList.add(Double.parseDouble(cursor.getString(1)));
-                    cursor.moveToNext();
-                }
+                readSamples(entry);
             }
-            cursor.close();
             return entries;
-
-        }catch (Exception e){
-            Log.e("TrackingDB", "on Select: getEntries() "+e.getMessage());
+        } catch (Exception e) {
+            Log.e("TrackingDB", "on Select: getEntries() " + e.getMessage());
+            return new ArrayList<>();
         }
-
-        return new ArrayList<>();
     }
-
 
     public TrackerEntry getEntry(Date date) {
         TrackerEntry entry = null;
-        try{
-            Cursor cursor = db.rawQuery("Select * from trackerentry WHERE date = '"+date+"'", null);
-            cursor.moveToNext();
-            while(!cursor.isAfterLast()){
-                Date dat = new Date(Long.parseLong(cursor.getString(0)));
-                double distance = Double.parseDouble(cursor.getString(1));
-                int time = Integer.parseInt(cursor.getString(2));
-                TrackingAttribute speed = new TrackingAttribute();
-                speed.setAverage(Double.parseDouble(cursor.getString(3)));
-                speed.setMax(Double.parseDouble(cursor.getString(4)));
-                speed.setMin(Double.parseDouble(cursor.getString(5)));
-                TrackingAttribute altitude = new TrackingAttribute();
-                altitude.setAverage(Double.parseDouble(cursor.getString(6)));
-                altitude.setMax(Double.parseDouble(cursor.getString(7)));
-                altitude.setMin(Double.parseDouble(cursor.getString(8)));
-                entry = new TrackerEntry(dat,distance,time,speed,altitude);
-                cursor.moveToNext();
-
+        try {
+            try (Cursor cursor = db.rawQuery("SELECT * FROM trackerentry WHERE date = ?",
+                    new String[]{Long.toString(date.getTime())})) {
+                if (!cursor.moveToFirst()) {
+                    return null;
+                }
+                entry = readEntry(cursor);
             }
-            cursor = db.rawQuery("Select * from speed where date = "+entry.getDate().getTime(), null);
-            cursor.moveToNext();
-            while(!cursor.isAfterLast()){
-                List speedList = entry.getSpeed().getList();
-                speedList.add(Double.parseDouble(cursor.getString(1)));
-                cursor.moveToNext();
-            }
-            cursor = db.rawQuery("Select * from altitude where date = "+entry.getDate().getTime(), null);
-            cursor.moveToNext();
-            while(!cursor.isAfterLast()){
-                List altitudeList = entry.getAltitude().getList();
-                altitudeList.add(Double.parseDouble(cursor.getString(1)));
-                cursor.moveToNext();
-            }
-            cursor.close();
-            return entry;
-
-        }catch (Exception e){
-            Log.e("TrackingDB", "on Select: getEntry() "+e.getMessage());
+            readSamples(entry);
+        } catch (Exception e) {
+            Log.e("TrackingDB", "on Select: getEntry() " + e.getMessage());
         }
-
         return entry;
+    }
+
+    private TrackerEntry readEntry(Cursor cursor) {
+        Date date = new Date(Long.parseLong(cursor.getString(0)));
+        double distance = Double.parseDouble(cursor.getString(1));
+        int time = Integer.parseInt(cursor.getString(2));
+        TrackingAttribute speed = new TrackingAttribute();
+        speed.setAverage(Double.parseDouble(cursor.getString(3)));
+        speed.setMax(Double.parseDouble(cursor.getString(4)));
+        speed.setMin(Double.parseDouble(cursor.getString(5)));
+        TrackingAttribute altitude = new TrackingAttribute();
+        altitude.setAverage(Double.parseDouble(cursor.getString(6)));
+        altitude.setMax(Double.parseDouble(cursor.getString(7)));
+        altitude.setMin(Double.parseDouble(cursor.getString(8)));
+        return new TrackerEntry(date, distance, time, speed, altitude);
+    }
+
+    private void readSamples(TrackerEntry entry) {
+        String[] date = {Long.toString(entry.getDate().getTime())};
+        try (Cursor cursor = db.rawQuery("SELECT speed FROM speed WHERE date = ?", date)) {
+            while (cursor.moveToNext()) {
+                entry.getSpeed().getList().add(Double.parseDouble(cursor.getString(0)));
+            }
+        }
+        try (Cursor cursor = db.rawQuery("SELECT altitude FROM altitude WHERE date = ?", date)) {
+            while (cursor.moveToNext()) {
+                entry.getAltitude().getList().add(Double.parseDouble(cursor.getString(0)));
+            }
+        }
     }
 }
