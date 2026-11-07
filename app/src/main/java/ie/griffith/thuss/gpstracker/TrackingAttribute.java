@@ -17,7 +17,7 @@ public class TrackingAttribute {
         sum = 0.0;
         count = 0;
         min = Double.MAX_VALUE;
-        max = Double.MIN_VALUE;
+        max = -Double.MAX_VALUE;
         list = new ArrayList<>();
     }
     void addValue(Double newValue){

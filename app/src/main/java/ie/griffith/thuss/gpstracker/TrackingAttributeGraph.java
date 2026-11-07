@@ -49,7 +49,9 @@ public class TrackingAttributeGraph extends View {
 
             float unit;
             // Just as safety because double - float cast necessary and normally not possible
-            if(trackingAttribute.getMax() > Float.MAX_VALUE){
+            if (trackingAttribute.getMax() <= 0) {
+                unit = 0;
+            } else if(trackingAttribute.getMax() > Float.MAX_VALUE){
                 unit = height / Float.MAX_VALUE;
             }else{
                 unit =  height / Float.valueOf(String.valueOf(trackingAttribute.getMax()));
