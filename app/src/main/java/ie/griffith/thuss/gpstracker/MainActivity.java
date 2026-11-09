@@ -3,104 +3,105 @@ package ie.griffith.thuss.gpstracker;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.LocationManager;
 import android.os.Bundle;
-import android.os.SystemClock;
-import android.util.Log;
 import android.view.View;
-import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.Date;
-
-import static android.Manifest.permission.ACCESS_FINE_LOCATION;
-
 public class MainActivity extends AppCompatActivity {
+    private static final int REQUEST_LOCATION = 1;
+
     private TrackerEntryManager manager;
-    TrackingTask t;
-    Date startTime;
-    Date endTime;
+    private TrackingSession session;
+
     @Override
-    protected void onCreate(final Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         manager = new TrackerEntryManager(getApplicationContext());
 
-        checkPermission();
-
-        Button start = findViewById(R.id.start);
-        Button stop =  findViewById(R.id.stop);
-        Button history = findViewById(R.id.history);
-
-        start.setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.start).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(t == null) {
-                    startTime = new Date();
-                    Log.e("MainActivity", "Tracking started");
-                    t = new TrackingTask();
-                    t.setKeepTracking(true);
-                    t.execute(MainActivity.this);
-                }
+                startTracking();
             }
         });
-
-        stop.setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.stop).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                endTime = new Date();
-                Log.e("MainActivity", "Tracking stopped");
-
-                if(t != null){
-                    t.setKeepTracking(false);
-                    TrackerEntry entry = t.getTrackerEntry();
-                    t = null;
-                    entry.setTime((int) (endTime.getTime() - startTime.getTime()));
-                    manager.saveNewEntry(entry);
-                    DetailActivity.entry = entry;
-                    Intent intent = new Intent(getApplicationContext(), DetailActivity.class);
-                    startActivity(intent);
-                }
-
-
-
-                }
+                stopTracking();
+            }
         });
-
-        history.setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.history).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 ListActivity.list = manager.getEntries(getApplicationContext());
-                Intent intent = new Intent(getApplicationContext(), ListActivity.class);
-                startActivity(intent);
+                startActivity(new Intent(MainActivity.this, ListActivity.class));
             }
         });
-
     }
 
-
-
-    private void checkPermission() {
+    private void startTracking() {
+        if (session != null) {
+            return;
+        }
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
-                == PackageManager.PERMISSION_GRANTED) {
-
-            Log.e("MainActivity","GPS Permission granted");
-        } else {
-            // Show rationale and request permission.
-            Log.e("MainActivity","GPS Permission declined \n request permission");
+                != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this,
-                    new String[]{ACCESS_FINE_LOCATION}, 0);
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION);
+            return;
+        }
+
+        LocationManager locations = (LocationManager) getSystemService(LOCATION_SERVICE);
+        if (locations == null || !locations.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+            Toast.makeText(this, "Enable GPS to start recording.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        TrackingSession newSession = new TrackingSession(locations);
+        try {
+            newSession.start();
+            session = newSession;
+        } catch (SecurityException exception) {
+            Toast.makeText(this, "Location permission is required.", Toast.LENGTH_SHORT).show();
         }
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        t.setKeepTracking(false);
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == REQUEST_LOCATION && grantResults.length > 0
+                && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            startTracking();
+        }
+    }
+
+    private void stopTracking() {
+        if (session == null) {
+            return;
+        }
+
+        TrackerEntry entry = session.finish();
+        session = null;
+        if (entry == null) {
+            Toast.makeText(this, "No GPS fix was recorded.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        manager.saveNewEntry(entry);
+        DetailActivity.entry = entry;
+        startActivity(new Intent(this, DetailActivity.class));
+    }
+
+    @Override
+    protected void onStop() {
+        if (session != null) {
+            session.cancel();
+            session = null;
+        }
+        super.onStop();
     }
 }
-
